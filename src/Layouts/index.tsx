@@ -1,66 +1,33 @@
-import { useState } from 'react';
-import { Box, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import Sidebar from './Sidebar';
+// src/Layouts/index.tsx
+import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const navItems = ['Home', 'About', 'Faculty', 'Academic', 'Research', 'Facilities'];
 
-const Layout = ({ children }: LayoutProps) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const theme = useTheme();
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Box
-        component="header"
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          width: '100%',
-          position: 'fixed',
-          zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: theme.palette.background.paper,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box >
-        <Typography variant="h2" color="primary" sx={{ fontWeight: 'bold' }}>
-          CSD & CSIT
-        </Typography>
-      </Box>
+    <>
+      <AppBar position="sticky" color="default" elevation={1}>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Typography variant="h6" fontWeight="bold">
+            CSD & CSIT
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {navItems.map((item) => (
+              <Button
+                key={item}
+                component={Link}
+                to={`/${item.toLowerCase()}`}
+                sx={{ color: 'text.primary', fontWeight: 600 }}
+              >
+                {item}
+              </Button>
+            ))}
+          </Box>
         </Toolbar>
-      </Box>
-
-      <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} />
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${240}px)` },
-          backgroundColor: theme.palette.background.default,
-          minHeight: '100vh',
-          mt: { xs: 8, sm: 0 }, // Adjust margin for mobile view
-        }}
-      >
-        {children}
-      </Box>
-    </Box>
+      </AppBar>
+      {children}
+    </>
   );
 };
 
